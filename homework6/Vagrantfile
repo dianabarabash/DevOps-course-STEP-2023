@@ -1,0 +1,59 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/ubuntu2204"
+  config.vm.hostname = "homework6"
+  config.vm.box_check_update = false
+
+  config.vm.disk :disk, size: "2GB", primary: true 
+  config.vm.disk :disk, size: "400MB", primary: false, name: "extra_storage0"
+  config.vm.disk :disk, size: "400MB", primary: false, name: "extra_storage1"
+  config.vm.disk :disk, size: "400MB", primary: false, name: "extra_storage2"
+  config.vm.disk :disk, size: "400MB", primary: false, name: "extra_storage3"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 1 
+   end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    # Partition and create primary partition on each disk
+    parted /dev/sdb mklabel msdos
+    parted /dev/sdc mklabel msdos
+    parted /dev/sdd mklabel msdos
+    parted /dev/sde mklabel msdos
+    parted -a optimal /dev/sdb mkpart primary ext4 0% 400M
+    parted -a optimal /dev/sdc mkpart primary ext4 0% 400M
+    parted -a optimal /dev/sdd mkpart primary ext4 0% 400M
+    parted -a optimal /dev/sde mkpart primary ext4 0% 400M
+
+    # Create physical volumes
+    pvcreate /dev/sdb1
+    pvcreate /dev/sdc1
+    pvcreate /dev/sdd1
+    pvcreate /dev/sde1
+
+    # Create volume groups
+    vgcreate vg0 /dev/sdb1 /dev/sdc1
+    vgcreate vg1 /dev/sdd1 /dev/sde1
+
+    # Create logical volumes
+    lvcreate -l 100%FREE -n lv0 vg0
+    lvcreate -l 100%FREE -n lv1 vg1
+    
+    # Create filesystems on the logical volumes
+    mkfs.ext4 /dev/vg0/lv0
+    mkfs.ext4 /dev/vg1/lv1
+    
+    # Create mount point directories
+    mkdir /mnt/vol0
+    mkdir /mnt/vol1
+
+    # Mount the logical volumes
+    mount /dev/vg0/lv0 /mnt/vol0
+    mount /dev/vg1/lv1 /mnt/vol1
+
+    # Update /etc/fstab
+    echo "/dev/vg0/lv0   /mnt/vol0   ext4   defaults   0   0" >> /etc/fstab
+    echo "/dev/vg1/lv1   /mnt/vol1   ext4   defaults   0   0" >> /etc/fstab
+    SHELL
+
+end
