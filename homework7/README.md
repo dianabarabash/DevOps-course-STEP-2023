@@ -1,22 +1,13 @@
 Hometask #7 (01/11)
 ===================
 
-1. Run ec2-instance (ami-053b0d53c279acc90) Ubuntu 22.04
-2. Connect to instance via ssh with dynamic port forward ( -D)
-3. Configure SOCKS-proxy for your desktop browser using ssh dynamic port forwarding. Check your proxy by changing location of your browser. (Visit: getip.org) 
-4. Run any web server on your home computer. (see: one line python web-server)
-5. Connect to instance ssh-reverse using ssh remote port forwarding (-R). Check your connection from the 6. Internet to your home computer web server.
-
-Do not forget:
---------------
-  - modify with used-data /etc/ssh/sshd_config on your instance for GatewayPorts=yes using sed
-  - restart ssh service on instance (in user-data)
-  - add inbound port in AWS SG rules on instance (preferably via aws cli)
-Store ssh command lines used in 2. and 5,6
-Push user-data and commands to github.
-
 Guide
 -----
+
+- Start instance
+```bash
+./run-and-provision.sh
+```
 
 - Login to the EC2 instance with dynamic port forwarding
 ```bash
