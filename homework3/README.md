@@ -2,7 +2,7 @@ Hometask #3 (26/09)
 ===================
 Guide
 -----
-- Start to the instance
+- Start instance
 ```bash
 ./run-and-provision.sh
 ```
