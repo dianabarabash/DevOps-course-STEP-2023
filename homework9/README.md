@@ -26,4 +26,7 @@ docker -H localhost:5566 build . -t diana_nginx
 docker -H localhost:5566 run -p 80:80 diana_nginx
 ```
 
-- Check your server in browser: http://<your_instance_ip>
+- Check your server in browser:
+```bash
+http://<your_instance_ip>
+```
