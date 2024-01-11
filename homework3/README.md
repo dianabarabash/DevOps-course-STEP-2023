@@ -2,7 +2,7 @@ Hometask #3 (26/09)
 ===================
 Guide
 -----
-- Connect to the instance
+- Start to the instance
 ```bash
 ./run-and-provision.sh
 ```
