@@ -1,8 +1,6 @@
 Hometask #9
 ===========
 
-Check your server in browser: http://<your_instance_ip>
-
 Guide
 -----
 
